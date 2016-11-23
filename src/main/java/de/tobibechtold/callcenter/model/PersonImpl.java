@@ -1,8 +1,5 @@
 package de.tobibechtold.callcenter.model;
 
-/**
- * Created by Tobi on 23.11.16.
- */
 public class PersonImpl implements Person {
     private String name;
     private int age;

@@ -12,13 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by Tobi on 23.11.16.
- */
 public class CallComponentTest {
 
     private CallComponent underTest;
@@ -108,9 +105,7 @@ public class CallComponentTest {
     @Test
     public void callWithEmptyList_DoesntExecuteCall() throws Exception {
         ArrayList<Person> persons = new ArrayList<>();
-
         underTest.call(persons);
-
         verify(hiPath, never()).executeCall(any(Person.class));
     }
 
