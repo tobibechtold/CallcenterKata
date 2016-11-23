@@ -1,22 +1,36 @@
 package de.tobibechtold.callcenter.component;
 
+import de.tobibechtold.callcenter.hipath.HiPath;
 import de.tobibechtold.callcenter.model.Person;
 import de.tobibechtold.callcenter.model.Person.Gender;
 import de.tobibechtold.callcenter.model.PersonImpl;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by Tobi on 23.11.16.
  */
 public class CallComponentTest {
 
-    private CallComponent underTest = new CallComponent();
+    private CallComponent underTest;
+
+    @Mock
+    private HiPath hiPath;
+
+    @Before
+    public void setUp() throws Exception {
+        hiPath = mock(HiPath.class);
+        underTest = new CallComponent(hiPath);
+    }
 
     @Test
     public void filterPeopleOlderThan16_WithEmptyList_ReturnsEmptyList() throws Exception {
@@ -89,6 +103,43 @@ public class CallComponentTest {
         assertThat(filtered.contains(personAge18), is(true));
         assertThat(filtered.contains(personAge19), is(false));
         assertThat(filtered.contains(female), is(false));
+    }
+
+    @Test
+    public void callWithEmptyList_DoesntExecuteCall() throws Exception {
+        ArrayList<Person> persons = new ArrayList<>();
+
+        underTest.call(persons);
+
+        verify(hiPath, never()).executeCall(any(Person.class));
+    }
+
+    @Test
+    public void callWithPersonsExecutesCallToPersons() throws Exception {
+        ArrayList<Person> persons = new ArrayList<>();
+        Person person1 = personWithAgeAndGender(16, Gender.MALE);
+        Person person2 = personWithAgeAndGender(19, Gender.FEMALE);
+        persons.add(person1);
+        persons.add(person2);
+
+        underTest.call(persons);
+
+        verify(hiPath, times(1)).executeCall(person1);
+        verify(hiPath, times(1)).executeCall(person2);
+    }
+
+    @Test
+    public void callWithPersonsExecutesCallToFilteredPersons() throws Exception {
+        ArrayList<Person> persons = new ArrayList<>();
+        Person person1 = personWithAgeAndGender(16, Gender.MALE);
+        Person person2 = personWithAgeAndGender(19, Gender.FEMALE);
+        persons.add(person1);
+        persons.add(person2);
+
+        underTest.call(underTest.filter(persons, p -> p.getAge() <= 18));
+
+        verify(hiPath, times(1)).executeCall(person1);
+        verify(hiPath, never()).executeCall(person2);
     }
 
     private Person personWithAgeAndGender(int age, Gender gender) {
