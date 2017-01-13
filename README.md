@@ -18,5 +18,5 @@ It is your job to build a `CallcenterComponent`that is used to call different gr
 
 ## Credits
 
-Idea: Peter Fichtner
+Thanks to [Peter Fichtner](https://github.com/pfichtner) for the idea
 
