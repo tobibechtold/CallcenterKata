@@ -16,3 +16,7 @@ It is your job to build a `CallcenterComponent`that is used to call different gr
 2. Your Callcenter should call all active airline pilots. Airline pilots are allowed to fly between 25 and 65.
 3. Your Callcenter should call all female persons between 14 and 18 to promote the new Justin Bieber album.
 
+## Credits
+
+Idea: Peter Fichtner
+
